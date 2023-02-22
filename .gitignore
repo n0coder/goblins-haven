@@ -1,5 +1,5 @@
 # Node modules
-node_modules
+node_modules/
 
 # Build files
 dist/
@@ -7,6 +7,9 @@ build/
 out/
 .vscode/
 npm-debug.log
+
+#other Files from sources i don't want to include lol
+assets/pack/ff5/zozo/ 
 
 # MacOS
 .DS_Store
