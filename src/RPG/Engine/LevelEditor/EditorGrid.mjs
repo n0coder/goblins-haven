@@ -61,8 +61,8 @@ export class EditorGrid {
         var img = await this.createImg(width, height, minX / this.tileSize, minY / this.tileSize);
         var blob = await this.imgToBlob(img.get());
         
-        await this.createZip(blob, `${mapName}.zip`, async (zip) => {
-            console.log(zip);
+        await this.createZip(`${mapName}.zip`, async (zip) => {
+            zip.file("map.png", blob);
             await extra(zip)
         })
         
@@ -75,9 +75,8 @@ export class EditorGrid {
         document.body.appendChild(link);
         link.click();
     }
-    async createZip(img, zipName, extra) {
+    async createZip(zipName, extra) {
         var zip = new JSZip();
-        zip.file("map.png", img);4
         extra(zip); // to pipe in extra files yk
         zip.generateAsync({type: "blob"}).then((content) => {
             this.saveBlob(content, zipName)

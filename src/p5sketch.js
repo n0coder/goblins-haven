@@ -39,7 +39,7 @@ new window.p5((p) => {
         let menu = p.select('#game');
         menu.style("width", `${p.gameW}px`);
         menu.style("height", `${p.gameH}px`);
-        p.createCanvas(p.gameW,  p.gameH, p.WEBGL).parent("sketch-holder");
+        p.createCanvas(p.gameW,  p.gameH).parent("sketch-holder");
         var player = new Player(p, 0, 0, 128, sprite)
         camera = new Camera(p, new Transform(0,0,1), player, .5);
         sceneManager = new SceneManager(p, player, camera, possibleTiles, mapTexture);
@@ -58,7 +58,6 @@ new window.p5((p) => {
   
     p.draw = function() {
         p.background(34.5, 34.5, 34.5);
-        p.rotateX(p.PI*.125);
         p.noStroke();
         let deltaTime = calculateDeltaTime();
         sceneManager.update(deltaTime);
