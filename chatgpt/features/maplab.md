@@ -1,4 +1,10 @@
 # maplab
+clickable links to relevant scripts:
+[MapData.mjs](https://github.com/n0coder/goblins-haven/blob/main/src/RPG/Engine/LevelEditor/MapData.mjs) - 
+[MapLab.mjs](https://github.com/n0coder/goblins-haven/blob/main/src/RPG/Engine/LevelEditor/MapLab.mjs)
+---
+
+
 
 ### n0coder
 > can you help me figure out a system for holding, saving and loading the map data? what should we call this system? can you give it a cool robotic name similar to robots in world of warcraft, but the name needs to be related to the map system.
