@@ -1,3 +1,4 @@
+import { experiments } from "../../DumbExperiment.mjs";
 import { GameMode } from "./GameMode.mjs";
 
 export class MainMenu extends GameMode {
@@ -12,7 +13,7 @@ export class MainMenu extends GameMode {
             },
             {
                 name: "New",
-                action: () => console.log("Load button pressed")
+                action: () => console.log(experiments.generateMechName(`level ${Date.now()}`))
             },
             {
                 name: "Load",

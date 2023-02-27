@@ -58,30 +58,19 @@ export class EditorGrid {
         const [minX, minY, maxX, maxY] = this.getGridBounds();
         const width = (maxX - minX) / this.tileSize;
         const height = (maxY - minY) / this.tileSize;
-        var img = await this.createImg(width, height, minX / this.tileSize, minY / this.tileSize);
-        var blob = await this.imgToBlob(img.get());
-        
-        await this.createZip(`${mapName}.zip`, async (zip) => {
-            zip.file("map.png", blob);
-            await extra(zip)
-        })
+        const minhX = minX / this.tileSize;
+        const minhY = minY / this.tileSize;
+        var img = await this.createImg(width, height, minhX, minhY);
         
     }
-    async saveBlob(content, name) {
-        const url = window.URL.createObjectURL(new Blob([content]));
+    saveBlob(blob, filename) {
+        const url = window.URL.createObjectURL(new Blob([blob]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', name);
+        link.setAttribute('download', filename);
         document.body.appendChild(link);
         link.click();
-    }
-    async createZip(zipName, extra) {
-        var zip = new JSZip();
-        extra(zip); // to pipe in extra files yk
-        zip.generateAsync({type: "blob"}).then((content) => {
-            this.saveBlob(content, zipName)
-        });
-    }
+      }
     createImg(width, height, minX, minY) {
         var img = this.p.createImage(width, height);
         img.loadPixels();

@@ -1,6 +1,7 @@
 import {ContextMenu} from "../Engine/LevelEditor/ContextMenu.mjs";
 import {EditorGrid} from "../Engine/LevelEditor/EditorGrid.mjs";
 import {LevelSelectMenu} from "../Engine/LevelEditor/LevelSelectMenu.mjs";
+import { MapLab } from "../Engine/LevelEditor/MapLab.mjs";
 import {Scene} from "../Engine/Scene.mjs";
 import {GameMode} from "./GameMode.mjs";
 
@@ -11,18 +12,31 @@ export class EditMode extends GameMode {
         this.camera = camera;
         this.scene.hierarchy.push(player);
         this.possibleTiles = possibleTiles;
+        this.mapLab = new MapLab(p);
+        this.mapLab.onMapChanged = (oldMap, newMap) => this.onMapChanged(oldMap, newMap);
         this.editorGrid = new EditorGrid(p, camera, 64);
+
         this.currentTile = this.possibleTiles[1]
         this.levelSelector = new LevelSelectMenu(p, () => this.onNewSelected(), async () => await this.onOpenSelected(), async () => await this.onSaveSelected());
         // other editing-related properties
     }
     onNewSelected() {
+        this.mapLab.newMap();
+        console.log("new was selected");
         // reset editor grid
         // set currentTile to default mode
         // shift player/camera back to center
     }
+    onMapChanged(oldMap, newMap) {
+        console.log(["map was changed", oldMap, newMap, oldMap?.mapData.levelId, newMap?.mapData.levelId])
+        //unload map png, load new one
+        //swap out map info...
+        //easier done than said...
+    }
 
     async onOpenSelected() {
+        //this.mapLab.loadMap();//we need a way to choose a map
+        console.log(["open selected", oldMap, newMap])
         // this will get called when a map is selected
         // load map into editor grid (a zip somehow)
         // do spawn point tile checks (to find where to place player)
@@ -33,11 +47,14 @@ export class EditMode extends GameMode {
     async onSaveSelected(mapName = "map") {
         // console.log([this.editorGrid, this.editorGrid.saveGrid])
         // pack tiles from the editor grid into a texture
+        this.mapLab.saveMap(); 
+        //some work will have to be done to have it save the grid...
+        /*
         await this.editorGrid.saveGrid(mapName, async (zip) => {
           console.log(zip);
           zip.file("extra.txt", "testing extra pipe\n");
         }); // ask chatgpt how to convert the p5.img file to a png and insert it to the zip without saving it
-        
+        */
         //
     }
 

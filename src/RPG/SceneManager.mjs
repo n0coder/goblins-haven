@@ -5,7 +5,7 @@ import { MainMenu } from "./Modes/MainMenu.mjs";
 export class SceneManager {
     constructor(p, player, camera, possibleTiles, mapTexture) {
       this.currentMode = null;
-      this.defaultScene = "edit mode"; //specify scene to boot directly into for debugging purposes
+      this.defaultScene = "main menu"; //specify scene to boot directly into for debugging purposes
       this.scenes = {
         "main menu": () => {
           this.currentMode = new MainMenu(p, null, null, this, possibleTiles, mapTexture);
