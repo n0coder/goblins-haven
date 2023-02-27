@@ -5,7 +5,7 @@ export class MainMenu extends GameMode {
     constructor(p5, player, camera, sceneManager) {
         super(p5, player, camera, sceneManager)
         this.p5= p5;
-        
+        //a list of all buttons and what they do
         this.buttons = [
             {
                 name: "Play",
@@ -19,14 +19,15 @@ export class MainMenu extends GameMode {
                 name: "Load",
                 action: () => console.log("Load button pressed")
             },
-
             {
                 name: "Edit Mode",
                 action: () => sceneManager.loadScene("edit mode")
-            }, {
+            }, 
+            {
                 name: "Settings",
                 action: () => console.log("Settings button pressed")
-            }, {
+            }, 
+            {
                 name: "Info",
                 action: () => console.log("Info button pressed")
             },
@@ -35,26 +36,24 @@ export class MainMenu extends GameMode {
     }
 
     start() {
+        //create an html menu div
         this.menu = this.p5.createDiv("").id("MainMenu").parent("menu");
+        //spawn the buttons and assign a mouse pressed action based on the button
         this.buttons.forEach((button, index) => {
-            let buttona = this.p5.createButton(button.name).parent(this.menu).addClass("MainMenuButton").mousePressed(button.action);
-            if (index === this.selectedButton) {
-                buttona.addClass("Selected");
-            }
+            let buttona = this.p5.createButton(button.name).parent(this.menu).addClass("MainMenuButton");
+            buttona.mousePressed(button.action);
         });
       
     }
 
+    //when the scene ends we remove the menu from the screen if it exists
     end() {
-        //destroy menu if it's drawing
-        console.log("i should be removed");
-        if (this.menu)
-        this.menu.remove();
-        //let prevMenu = this.p5.select('MainMenu');
-        //if (prevMenu) 
-        //if (prevMenu) prevMenu.remove();
+        if (this.menu) this.menu.remove();
+        //this suggests that the following line is possible
+        //this.menu?.remove();
+        //this feature does not appear to work like in c#.
     }
-
+    
     passthrough(buttonName) {
         const buttonIndex = this.buttons.findIndex((button) => button.name === buttonName);
         if (buttonIndex !== -1) {
