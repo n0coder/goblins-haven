@@ -1,7 +1,7 @@
 export class experiments {
     
 
-    static generateMechName(baseWord) {
+    static modStringFunny(baseWord) {
         const mods = [
             {name:"round", func: (word) => {
                 const replacements = {
@@ -124,6 +124,12 @@ export class experiments {
               {name:"round", func: (word) => {
                 return word.replace(/\s/g, '');
               }},
+              {name: "wackycharscape",
+                func: (word) => {
+                  const charMap = "⇝⸃⦑(‿※⁀)⦒⸂"; // Mapping from digits 0 to 9 to the replacement characters
+                  return word.replace(/\d/g, (digit) => charMap[digit]);
+                }
+              },
               {name:"reverser", func: (word) => {
                 let reversedWord = "";
                 for (let i = word.length - 1; i >= 0; i--) {
@@ -132,16 +138,14 @@ export class experiments {
                 return reversedWord;
             }},
             {name:"emoji", func: (word) => {
-                const emoticons = [":)", ":D", ";)", "<3", ":P", "XD", ":O", ":("];
-                let newWord = "";
-                for (let i = 0; i < word.length; i++) {
-                    newWord += word[i];
-                    if (i < word.length - 1) {
-                        newWord += emoticons[Math.floor(Math.random() * emoticons.length)];
-                    }
-                }
-                return newWord;
-            }},
+              const emoticons = [":)", ":D", ";)", "<3", ":P", "XD", ":O", ":("];
+              let newWord = word;
+              const numEmoticons = Math.floor(Math.random() * 3) + 1; // generate a random number of emoticons between 1 and 3
+              for (let i = 0; i < numEmoticons; i++) {
+                  newWord += " " + emoticons[Math.floor(Math.random() * emoticons.length)]; // add a space before each emoticon for better readability
+              }
+              return newWord;
+          }},
             {name:"vowel(w)er", func: (word) => {
                 const vowels = ["a", "e", "i", "o", "u"];
                 return word
@@ -174,16 +178,36 @@ export class experiments {
         var input = baseWord;
         var modchain = [{name:"base", input: input}];
         
-        for (let i = 0; i < 3; ) {
+        for (let i = 0; i < 6; ) {
             var mod = copymods[Math.floor(Math.random() * copymods.length)];
             copymods = copymods.filter(item => item !== mod); //remove mod from copy of array
             input= mod.func(input);
             modchain.push({name: mod.name, input: input});
             i++
         }
-        input =input.replace(/[^\w\s{}[\]:,.-]/g, "").replace("...","o")
+        input =input.replace(/[\u0000-\u001F"\\]/g, "").replace("...","o").replace("__", "x").replace("---", "u").replace("..", "↡");
         modchain.push({name: "clean", input: input});
-        console.log(modchain);
+        //console.log(modchain);
           return input;
+      }
+      static generateRandomString(n) {
+        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let randomString = '';
+        for (let i = 0; i < n; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          randomString += characters[randomIndex];
+        }
+        return randomString;
+      }
+      static cleanEndString(str, max) {
+        const notAllowedChars = "{}[]-~=_+()<>!@#$%^&*/.,:|?`;\"'";
+        let count = 0;
+        for (let i = str.length - 1; i >= 0 && str.length > max; i--) {
+          if (notAllowedChars.indexOf(str[i]) !== -1) {
+            str = str.slice(0, i) + str.slice(i + 1);
+            count++;
+          }
+        }
+        return str;
       }
 }

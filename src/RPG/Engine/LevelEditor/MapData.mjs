@@ -7,7 +7,7 @@ export class MapData {
     constructor(levelName, description, levelId, minOffsetX, minOffsetY, selectedTile, spawnPointFallback, mapTexturePath, customTileRules) {
       this.levelName = levelName;
       this.description = description;
-      this.levelId = levelId || experiments.generateMechName(levelName+Date.now()); //generate random mech name... this could possibly cause an issue...
+      this.levelId = levelId || experiments.modStringFunny(Date.now()); //generate random mech name... this could possibly cause an issue...
       this.minOffsetX = minOffsetX;
       this.minOffsetY = minOffsetY;
       this.selectedTile = selectedTile;
