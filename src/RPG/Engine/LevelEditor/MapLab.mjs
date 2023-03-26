@@ -10,7 +10,7 @@ export class MapLab {
         this.onMapChanged;
     }
 
-    async importMapZip(zipFile) {
+    async importMapZip(zipFile) { // load zip holding maps into maps array 
         const zip = await JSZip.loadAsync(zipFile);
 
         let isMappack = zip.hasOwnProperty("mappack.json");
@@ -44,53 +44,36 @@ export class MapLab {
     }
 
 
-    async importMapZip(zipFile) {
-        const zip = await JSZip.loadAsync(zipFile);
-
-    }
-
-    async exportMap(map, extra) {
-        const zipData = await this.createZip(`${mapName}.zip`, async (zip) => {
-            zip.file("map.png", map.mapImg);
-            zip.file("map.json", map.mapJson);
-            if (extra) 
-                await extra(zip)
-
-
-            
-
-
-        });
-    }
-    async exportMapPack(maps, packName, extra) {
-        const zipData = await this.createZip(`${packName}.zip`, async (zip) => {
-            const levelsFolder = zip.folder('levels');
-            for (let i = 0; i < maps.length; i++) {
-                const mapFolder = levelsFolder.folder(`${i}`);
-                const map = maps[i];
-                const mapName = `map${
-                    i + 1
-                }`;
-                mapFolder.file(`${mapName}.png`, map.mapImg);
-                mapFolder.file(`${mapName}.json`, map.mapJson);
-                if (extra) 
-                    await extra(mapFolder, map, mapName);
-                
-
-
-            }
-        });
-    }
-    async saveDirtyCheck() { 
-        if (this.currentMap?.dirty) {
-          const result = await showConfirmationDialog("Save changes before creating a new map?");
-          if (result === "yes") {
-            await this.saveMap();
-          } else if (result === "cancel") {
-            return false;
-          }
+    async exportMap(data, name, extra) {
+        let mapData, packName;
+        if (data instanceof Map) {
+          mapData = [{ mapImg: data.mapImg, mapJson: data.mapJson }];
+          packName = name;
+        } else if (Array.isArray(data)) {
+          mapData = data;
+          packName = name;
+        } else {
+          throw new TypeError(`Invalid data type. Expected Map or Array, but received ${typeof data}`);
         }
-        return true;
+      
+        const zipData = await this.createZip(`${packName}.zip`, async (zip) => {
+          const levelsFolder = zip.folder('levels');
+          for (let i = 0; i < mapData.length; i++) {
+            const mapFolder = levelsFolder.folder(`${i}`);
+            const map = mapData[i];
+            const mapName = `map${i + 1}`;
+            mapFolder.file(`${mapName}.png`, map.mapImg);
+            mapFolder.file(`${mapName}.json`, map.mapJson);
+            if (extra) {
+              if (mapData.length === 1) {
+                await extra(zip, map, mapName);
+              } else {
+                await extra(mapFolder, map, mapName);
+              }
+            }
+          }
+        });
+        return zipData;
       }
       
       async showConfirmationDialog(message) {
@@ -126,52 +109,61 @@ export class MapLab {
           });
         });
       }
+    async saveDirtyCheck() { //think of something else later
+        if (this.currentMap?.dirty) {
+          const result = await this.showConfirmationDialog("Save changes before creating a new map?");
+          if (result === "yes") {
+            await this.saveMap();
+          } else if (result === "cancel") {
+            return false;
+          }
+        }
+        return true;
+      }
+      
     newMap() {
         if ( this.saveDirtyCheck() ) 
             this.setCurrentMap({ // sets current map and calls the map changed function
-                mapImg: undefined,
+                mapImg: undefined, //map is undefined so we will load empty map removing the old one
                 mapData: new MapData("Empty", "a blank map", undefined, 0, 0, undefined, undefined, undefined, undefined),
                 dirty: false // an unmodified empty map is not worth new/unload protecting lol
-            })
+            });
          // now load the map into the editor... < maybe this is open in the editor by setting currentMap
     }
-    saveMap() { // Check if there is a current map and it is dirty
-        console.log("save needs a way to 'save' the grid png")
-        if (this.currentMap && this.currentMap.dirty) { // Search for an existing map with the same levelName in the maps array
-            const index = this.maps.findIndex((map) => map.levelId === this.currentMap.levelId);
-
-            if (index !== -1) { // If the map already exists, replace it with the current map
-                this.maps[index] = this.currentMap;
-            } else { // If the map doesn't exist, add it to the end of the maps array
-                this.maps.push(this.currentMap);
-            }
-            this.currentMap.dirty = false;
+    async saveMap(editorGrid) {
+        if (this.currentMap && this.currentMap.dirty) {
+          const index = this.maps.findIndex((map) => map.levelId === this.currentMap.levelId);
+      
+          if (index !== -1) {
+            this.maps[index] = this.currentMap;
+          } else {
+            this.maps.push(this.currentMap);
+          }
+          this.currentMap.dirty = false;
+          this.currentMap.mapImg = await editorGrid.saveGrid(); //save current editor
         } else if (!this.currentMap) {
-            console.log("no current map to save")
+          console.log("no current map to save");
         }
-    }
+      }
     setCurrentMap(map) {
         const oldMap = this.currentMap;
         this.currentMap = map;
         this.currentMap.dirty = false; // ?
         if (this.onMapChanged) 
             this.onMapChanged(oldMap, this.currentMap);
-        
-
-
     }
     loadMap(map) {
         // this is the hardest part... taking the map from the grid and evaluating data based on it...
         // this will load the chosen map png into the map...
         // we will also load the map data...
         // not hard it's a mental barrier... kinda exciting tho lol...
-        if (currentMap ?. dirty) {
+        if (this.currentMap ?. dirty) {
             const confirmSave = confirm("Do you want to save changes before creating a new map?");
             if (confirmSave) {
-                saveMap();
+                this.saveMap();
             }
         }
-        this.setCurrentMap(map)
+        this.setCurrentMap(map);
     }
 
     async createImage(mapBlob) {
@@ -188,7 +180,7 @@ export class MapLab {
         var zip = new JSZip();
         extra(zip); // to pipe in extra files yk
         zip.generateAsync({type: "blob"}).then((content) => {
-            this.saveBlob(content, zipName)
+            this.saveBlob(content, zipName);
         });
     }
 
@@ -201,4 +193,16 @@ export class MapLab {
         document.body.appendChild(link);
         link.click();
     }
+    async getBlobFromP5Image(p5img, type) {
+        return new Promise((resolve) => {
+          p5img.canvas.toBlob(
+            (blob) => {
+              resolve(blob);
+            },
+            type,
+            1 //high quality image no compression?
+          );
+        });
+      }
+      
 }

@@ -6,15 +6,22 @@ export class Tile {
         this.imagePath = imagePath;
         this.color = color;
     }
-    draw(tileSize, colorMode = false) {
+    draw(tileSize, alpha=255, colorMode = false) {
+        
+          this.p5.push();
+
         if (colorMode) {
-            this.p5.fill(this.color[0], this.color[1], this.color[2], 255);
-            this.p5.rect(this.x, this.y, tileSize, tileSize);
+          this.p5.fill(this.color[0], this.color[1], this.color[2], alpha);
+          this.p5.rect(this.x, this.y, tileSize, tileSize);
         } else {
-            this.p5.image(this.image, this.x, this.y, tileSize, tileSize);
+          this.p5.tint(255, alpha);
+          this.p5.image(this.image, this.x, this.y, tileSize, tileSize);
         }
-    }
-    
+
+          this.p5.pop();
+        
+      }
+      
     copy() {
         let copiedTile = Object.assign({}, this);
         copiedTile.image = this.image;

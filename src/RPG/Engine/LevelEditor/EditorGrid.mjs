@@ -1,16 +1,43 @@
 // EditorGrid module
 export class EditorGrid {
-    constructor(p, camera, tileSize = 64) {
+    constructor(p, camera, tileSize = 64, editMode) {
         this.p = p;
         this.camera = camera;
         this.tileSize = tileSize;
         this.colorMode = false;
         this.grid = [];
+        this.editMode = editMode;
     }
 
     toggleColorMode() {
         this.colorMode = !this.colorMode;
     }
+    generateGrid(lookupTexture, offsetX = 0, offsetY = 0) {
+        lookupTexture.loadPixels();
+        for (let y = 0; y < lookupTexture.height; y++) {
+          this.grid[y] = [];
+          for (let x = 0; x < lookupTexture.width; x++) {
+            // get the RGB value of the current pixel
+            let index = (y * lookupTexture.width + x) * 4;
+            let r = lookupTexture.pixels[index];
+            let g = lookupTexture.pixels[index + 1];
+            let b = lookupTexture.pixels[index + 2];
+      
+            // find the corresponding tile for the current RGB value
+            let tile = this.possibleTiles.find(t => t.color[0] == r && t.color[1] == g && t.color[2] == b);
+      
+            // if the tile was found, place it in the grid
+            if (tile) {
+              // place the tile in the grid
+              if (typeof tile !== 'undefined') {
+                this.placeTile(tile, x + offsetX, y + offsetY);
+              }
+            }
+          }
+        }
+      }
+      
+      
     getGridBounds() {
         let minX = 16384;
         let minY = 16384;
@@ -51,7 +78,6 @@ export class EditorGrid {
         copiedTile.x = (x * this.tileSize);
         copiedTile.y = (y * this.tileSize);
         const pos = this.p.createVector(x, y);
-
         this.grid.push({tile: copiedTile, pos: pos});
     }
     async saveGrid(mapName, extra) {
@@ -61,16 +87,8 @@ export class EditorGrid {
         const minhX = minX / this.tileSize;
         const minhY = minY / this.tileSize;
         var img = await this.createImg(width, height, minhX, minhY);
-        
+        //pass the img into the maplab to save grid into a map
     }
-    saveBlob(blob, filename) {
-        const url = window.URL.createObjectURL(new Blob([blob]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-      }
     createImg(width, height, minX, minY) {
         var img = this.p.createImage(width, height);
         img.loadPixels();
@@ -87,41 +105,26 @@ export class EditorGrid {
         img.updatePixels();
         return img;
     }
-    imgToBlob(img) {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-
-        // Create a temporary p5.Graphics object
-        const graphics = this.p.createGraphics(img.width, img.height);
-        graphics.image(img, 0, 0);
-
-        // Draw the graphics to the context of the canvas
-        ctx.drawImage(graphics.elt, 0, 0);
-
-        return new Promise((resolve) => {
-            canvas.toBlob((blob) => {
-                resolve(blob);
-            });
-        });
-    }
     removeTile(x, y) {
         this.grid = this.grid.filter((tile) => tile.pos.x !== x || tile.pos.y !== y);
     }
 
     drawGrid() {
         for (let o of this.grid) {
-            o.tile.draw(this.tileSize, this.colorMode);
+            o.tile.draw(this.tileSize, 255, this.colorMode);
         }
-        const [x, y] = this.getGridCoords(this.p.mouseX, this.p.mouseY)
-        this.p.rect(x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize);
-        const [minX, minY, maxX, maxY] = this.getGridBounds()
+
+        const [x, y] = this.getGridCoords(this.p.mouseX, this.p.mouseY);
+        this.editMode.currentTile.x = x*this.tileSize;
+        this.editMode.currentTile.y = y*this.tileSize;
+        this.editMode.currentTile.draw(this.tileSize, 128, this.colorMode);
+        
+        const [minX, minY, maxX, maxY] = this.getGridBounds();
         this.p.stroke(255);
         this.p.noFill();
         // this.p.rect(minX*this.tileSize,minY*this.tileSize , maxX*this.tileSize,maxY*this.tileSize);
-
-        this.p.rect(minX, minY, maxX - minX, maxY - minY);
+        //this draws a grid bounds...
+        this.p.rect(minX, minY, maxX - minX, maxY - minY); 
 
         this.p.noStroke();
     }

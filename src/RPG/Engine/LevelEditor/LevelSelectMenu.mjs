@@ -16,7 +16,7 @@ export class LevelSelectMenu {
         let firstSection = this.p5.createDiv("").parent(this.menu).addClass("menuSection");
         let newButton = this.p5.createButton("New").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.new?.call());
         let openButton = this.p5.createButton("Open").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.openMenu?.call());
-        let saveButton = this.p5.createButton("Open").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.save?.call());
+        let saveButton = this.p5.createButton("Save").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.save?.call());
         
         // second section
         /*
@@ -45,7 +45,7 @@ export class LevelSelectMenu {
         let secondaryMenus = {
             "new": this.showNewMenu,
             "open": this.showOpenMenu
-        }
+        };
         let o = secondaryMenus[type];
         if (o) {
             this.p5.select('#secondaryEditorMenu')?.remove(); 

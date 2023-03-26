@@ -1,11 +1,13 @@
 import {Transform} from "./Engine/Transform.mjs";
 import {SpriteRenderer} from "./Engine/SpriteRenderer.mjs";
 import { Vector2 } from "./Engine/Math/Vector2.mjs";
+import { Sword } from "../Experiments/swordmagic.mjs";
 export class Player {
     constructor(p5, x, y, size, sprite) {
         this.p5 = p5;
         let tfm = new Transform(x, y, size);
         this.transform = tfm;
+        this.sword = new Sword(x,y, p5);
         this.transform.offsetY = .5 * this.transform.size;
         this.transform.centerize();
         this.speed = 225;
@@ -41,5 +43,6 @@ export class Player {
 
     draw() {
         this.spriteRenderer.draw();
+        this.sword.draw();
     }
 }

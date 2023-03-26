@@ -3,7 +3,7 @@ export class Grid {
       this.possibleTiles = possibleTiles;
       this.grid = [];
       this.tileSize = tileSize;  
-      this.gridSize = [-1, -1]      
+      this.gridSize = [-1, -1];     
     }
 
     generateGrid(lookupTexture) {
@@ -31,11 +31,6 @@ export class Grid {
       }
     }
     
-findSize() {
-    //console.log(this.grid);
-    
-}
-// function to place a tile in the grid
 placeTile(tile, x, y) {
   let copiedTile = tile.copy();
   this.grid[y][x] = copiedTile;

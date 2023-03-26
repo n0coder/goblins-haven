@@ -14,9 +14,9 @@ export class EditMode extends GameMode {
         this.possibleTiles = possibleTiles;
         this.mapLab = new MapLab(p);
         this.mapLab.onMapChanged = (oldMap, newMap) => this.onMapChanged(oldMap, newMap);
-        this.editorGrid = new EditorGrid(p, camera, 64);
+        this.editorGrid = new EditorGrid(p, camera, 64, this);
 
-        this.currentTile = this.possibleTiles[1]
+        this.currentTile = this.possibleTiles[1];
         this.levelSelector = new LevelSelectMenu(p, () => this.onNewSelected(), async () => await this.onOpenSelected(), async () => await this.onSaveSelected());
         // other editing-related properties
     }
@@ -28,7 +28,7 @@ export class EditMode extends GameMode {
         // shift player/camera back to center
     }
     onMapChanged(oldMap, newMap) {
-        console.log(["map was changed", oldMap, newMap, oldMap?.mapData.levelId, newMap?.mapData.levelId])
+        console.log(["map was changed", oldMap, newMap, oldMap?.mapData.levelId, newMap?.mapData.levelId]);
         //unload map png, load new one
         //swap out map info...
         //easier done than said...
@@ -36,7 +36,7 @@ export class EditMode extends GameMode {
 
     async onOpenSelected() {
         //this.mapLab.loadMap();//we need a way to choose a map
-        console.log(["open selected", oldMap, newMap])
+        console.log(["open selected"]);
         // this will get called when a map is selected
         // load map into editor grid (a zip somehow)
         // do spawn point tile checks (to find where to place player)
@@ -67,7 +67,7 @@ export class EditMode extends GameMode {
             // console.log(`left click ${gridX}, ${gridY}`);
         }
         super.leftClick();
-        this.open = this.contextMenu ?. menuOpen
+        this.open = this.contextMenu ?. menuOpen;
     }
     rightClick() {
 
@@ -77,7 +77,7 @@ export class EditMode extends GameMode {
         // console.log(`right click ${gridX}, ${gridY}`);
         this.contextMenu.rightClick();
 
-        this.open = this.contextMenu ?. menuOpen
+        this.open = this.contextMenu ?. menuOpen;
         super.rightClick();
     }
     // TODO: i need to handle the loading of specific levels in the editor
@@ -89,7 +89,7 @@ export class EditMode extends GameMode {
             return this.editorGrid;
         });
 
-        this.levelSelector.openMenu((selectedMap) => {})
+        this.levelSelector.openMenu((selectedMap) => {});
         // painting context menu:
         this.contextMenu = new ContextMenu(this.p, this.possibleTiles);
         this.contextMenu.onTilePicked = (oa) => {
