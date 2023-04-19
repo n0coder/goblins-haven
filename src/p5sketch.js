@@ -30,7 +30,12 @@ new window.p5((p) => {
       
         for (let i = 0; i < 9; i++) 
             possibleTiles.push(new Tile(p, 'assets/pack/ff5/zozo+/' + i + '.png', [1, 0, i]));
-        
+        for (let i = 0; i < 9; i++) 
+            possibleTiles.push(new Tile(p, 'assets/pack/testmetal/sprite' + i + '.png', [1, 1, i]));
+            for (let i = 0; i < 10; i++) 
+            possibleTiles.push(new Tile(p, 'assets/pack/testmetalshade/sprite' + i + '.png', [1, 2, i]));
+            for (let i = 0; i < 15; i++) 
+            possibleTiles.push(new Tile(p, 'assets/pack/zexus/sprite' + i + '.png', [1, 1, i]));
     }
     p.setup = function() {
         p.gameW = windowSize*1.777777;
@@ -40,7 +45,7 @@ new window.p5((p) => {
         menu.style("width", `${p.gameW}px`);
         menu.style("height", `${p.gameH}px`);
         p.createCanvas(p.gameW,  p.gameH).parent("sketch-holder");
-        var player = new Player(p, 0, 0, 128, sprite)
+        var player = new Player(p, 0, 0, 128, sprite);
         camera = new Camera(p, new Transform(0,0,1), player, .5);
         sceneManager = new SceneManager(p, player, camera, possibleTiles, mapTexture);
         sceneManager.start();
