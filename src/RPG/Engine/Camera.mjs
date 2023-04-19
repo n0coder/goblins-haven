@@ -1,12 +1,16 @@
 
+import { CosmicEntity } from "../Core/CosmicEntity/CosmicEntity.mjs";
+import { gameH, gameW } from "../Core/n0config.mjs";
+import { p, p5engine } from "../Core/p5engine.mjs";
 import {Vector2} from "./Math/Vector2";
+import { Transform } from "./Transform.mjs";
+//import p5 instance through module
 
+export class Camera extends CosmicEntity {
 
-export class Camera {
-
-    constructor(p5, transform, target, smoothness) {
-        this.p5 = p5;
-        this.transform = transform;
+    constructor(target, smoothness) {
+        super();
+        this.transform = new Transform(0,0,1);
         this.target = target;
         this.smoothness = smoothness;
     }
@@ -15,21 +19,20 @@ export class Camera {
     }
     start () {
         if (this.target && "transform" in this.target) {
-            this.transform.v.x  = (this.target.transform.x - (this.p5.gameW / 2));
-            this.transform.v.y = (this.target.transform.y - (this.p5.gameH / 2));
+            this.transform.v.x  = (this.target.transform.x - (gameW / 2));
+            this.transform.v.y = (this.target.transform.y - (gameH / 2));
         }
     }
-    update(deltaTime) {
+    draw(deltaTime) {
         if (this.target && "transform" in this.target) {
-            let x = (this.target.transform.x - (this.p5.gameW / 2));
-            let y = (this.target.transform.y - (this.p5.gameH / 2));
+            let x = (this.target.transform.x - (gameW / 2));
+            let y = (this.target.transform.y - (gameH / 2));
             var vector = this.transform.vectorTo(new Vector2(x, y));
             this.transform.v.x += vector.x * deltaTime * this.smoothness;
             this.transform.v.y += vector.y * deltaTime * this.smoothness;
+            p.translate(-this.transform.v.x, -this.transform.v.y);
         }
     }
 
-    draw() {
-        this.p5.translate(-this.transform.x, -this.transform.y);
-    }
 }
+export const cam = new Camera(undefined, .5);

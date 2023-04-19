@@ -1,3 +1,20 @@
+import { p5engine, p } from './RPG/Core/p5engine.mjs';
+import { cosmicEntityManager } from './RPG/Core/CosmicEntity/CosmicEntityManager.mjs';
+import { Player } from './RPG/Player.mjs';
+import { cam } from './RPG/Engine/Camera.mjs';
+
+var player = new Player(0,0,128);
+cam.follow(player);
+
+cosmicEntityManager.addEntity(cam);
+cosmicEntityManager.addEntity(player);
+
+//im glad this is somehow possible. 
+//i can swap out tech ez now.
+
+
+/*
+
 
 import { Tile } from './RPG/Tile.mjs';
 import { Transform }  from './RPG/Engine/Transform.mjs';
@@ -10,7 +27,6 @@ let scene, mapTexture;
 let possibleTiles = [];
 
 let sprite;
-let previousTime = 0;
 let camera;
 let windowSize = 512;
 
@@ -68,10 +84,6 @@ new window.p5((p) => {
         sceneManager.update(deltaTime);
         sceneManager.draw();
     };
-    function calculateDeltaTime() {
-        let currentTime = p.millis();
-        let deltaTime = currentTime - previousTime;
-        previousTime = currentTime;
-        return deltaTime / 1000;
-    }
+    
 });
+*/
