@@ -1,16 +1,14 @@
-import { Grid } from "../Grid.mjs";
-import { GameMode } from "./GameMode.mjs";
+import {Grid} from '../../../Grid.mjs';
+import { CosmicEntity as CosmicGalaxy } from "../../CosmicEntity/CosmicEntity.mjs";
 
-export class PlayMode extends GameMode {
-    constructor(p, player, camera, sceneManager, possibleTiles, mapTexture) {
-        super(p, player, camera,sceneManager, possibleTiles);
-        this.p = p;
-        this.scene.hierarchy.push(player);
-        this.possibleTiles = possibleTiles;
-        this.mapTexture = mapTexture;
-        // other play-related properties
+//this is probably a bad idea to rename the inheritance
+export class PlayMode extends CosmicGalaxy {
+    constructor() {
+        super();
     }
     start() { 
+
+        //this doesn't make sense here anymore
         this.scene.setup(()=>{
             let grid = new Grid(this.possibleTiles, 64);
             grid.generateGrid(this.mapTexture);
@@ -37,3 +35,4 @@ export class PlayMode extends GameMode {
 
     // other methods for handling gameplay
 }
+export const playMode = new PlayMode();

@@ -4,8 +4,6 @@ import { gameH, gameW } from "./n0config.mjs";
 class P5engine {
     constructor(){
         this.p = new window.p5(this.p5);
-        this.gameH = 128;
-        this.gameW = this.gameH*1.77777; 
     }
 
     p5(p) {

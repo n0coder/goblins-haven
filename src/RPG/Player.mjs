@@ -5,7 +5,7 @@ import { p } from "./Core/p5engine.mjs";
 import { CosmicEntity } from "./Core/CosmicEntity/CosmicEntity.mjs";
 
 export class Player extends CosmicEntity {
-    constructor(x, y, size, sprite) {
+    constructor(x, y, size) {
         super();
         let tfm = new Transform(x, y, size);
         this.transform = tfm;

@@ -1,23 +1,17 @@
-import {ContextMenu} from "../Engine/LevelEditor/ContextMenu.mjs";
-import {EditorGrid} from "../Engine/LevelEditor/EditorGrid.mjs";
-import {LevelSelectMenu} from "../Engine/LevelEditor/LevelSelectMenu.mjs";
-import { MapLab } from "../Engine/LevelEditor/MapLab.mjs";
-import {Scene} from "../Engine/Scene.mjs";
-import {GameMode} from "./GameMode.mjs";
+import {ContextMenu} from "../../../Engine/LevelEditor/ContextMenu.mjs";
 
-export class EditMode extends GameMode {
-    constructor(p, player, camera, sceneManager, possibleTiles) {
-        super(p, player, camera, sceneManager, possibleTiles);
-        this.p = p;
-        this.camera = camera;
-        this.scene.hierarchy.push(player);
-        this.possibleTiles = possibleTiles;
-        this.mapLab = new MapLab(p);
-        this.mapLab.onMapChanged = (oldMap, newMap) => this.onMapChanged(oldMap, newMap);
-        this.editorGrid = new EditorGrid(p, camera, 64, this);
+import { CosmicEntity as CosmicGalaxy } from "../../CosmicEntity/CosmicEntity.mjs";
+import { possibleTiles } from "../../n0config.mjs";
 
-        this.currentTile = this.possibleTiles[1];
-        this.levelSelector = new LevelSelectMenu(p, () => this.onNewSelected(), async () => await this.onOpenSelected(), async () => await this.onSaveSelected());
+export class EditMode extends CosmicGalaxy {
+    constructor() {
+        super();
+        //this.mapLab = new MapLab(p);
+        //this.mapLab.onMapChanged = (oldMap, newMap) => this.onMapChanged(oldMap, newMap);
+        //this.editorGrid = new EditorGrid(p, camera, 64, this);
+
+        this.currentTile = possibleTiles[1];
+        //this.levelSelector = new LevelSelectMenu(p, () => this.onNewSelected(), async () => await this.onOpenSelected(), async () => await this.onSaveSelected());
         // other editing-related properties
     }
     onNewSelected() {
@@ -127,3 +121,4 @@ export class EditMode extends GameMode {
     }
     // other methods for handling editing
 }
+export const editMode = new EditMode();

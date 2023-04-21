@@ -1,15 +1,18 @@
-import {experiments} from "../../DumbExperiment.mjs";
-import {GameMode} from "./GameMode.mjs";
+//this is an issue ../../../../...
+import {experiments} from "../../../../DumbExperiment.mjs";
+import { modeSwitcher } from "../../ModeSwitcher.mjs";
+import { p } from "../../p5engine.mjs";
+import { CosmicEntity as CosmicGalaxy } from "../../CosmicEntity/CosmicEntity.mjs";
 
-export class MainMenu extends GameMode {
-    constructor(p5, player, camera, sceneManager) {
-        super(p5, player, camera, sceneManager)
-        this.p5 = p5;
+export class MainMenu extends CosmicGalaxy {
+    constructor() {
+        super();
+    
         // a list of all buttons and what they do
         this.buttons = [
             {
                 name: "Play",
-                action: () => sceneManager.loadScene("play mode")
+                action: () => modeSwitcher.loadMode("play mode")
             },
             {
                 name: "New",
@@ -23,7 +26,7 @@ export class MainMenu extends GameMode {
             },
             {
                 name: "Edit Mode",
-                action: () => sceneManager.loadScene("edit mode")
+                action: () => modeSwitcher.loadMode("edit mode")
             }, 
             {
                 name: "Settings",
@@ -39,10 +42,10 @@ export class MainMenu extends GameMode {
 
     start() { 
         // create an html menu div
-        this.menu = this.p5.createDiv("").id("MainMenu").parent("menu");
+        this.menu = p.createDiv("").id("MainMenu").parent("menu");
         // spawn the buttons and assign a mouse pressed action based on the button
         this.buttons.forEach((button, index) => {
-            let buttona = this.p5.createButton(button.name).parent(this.menu).addClass("MainMenuButton");
+            let buttona = p.createButton(button.name).parent(this.menu).addClass("MainMenuButton");
             buttona.mousePressed(button.action);
         });
 
@@ -69,3 +72,4 @@ export class MainMenu extends GameMode {
     update() {}
     draw() {}
 }
+export const mainMenu = new MainMenu();

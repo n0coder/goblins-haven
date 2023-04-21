@@ -1,17 +1,29 @@
-import { p5engine, p } from './RPG/Core/p5engine.mjs';
-import { cosmicEntityManager } from './RPG/Core/CosmicEntity/CosmicEntityManager.mjs';
-import { Player } from './RPG/Player.mjs';
-import { cam } from './RPG/Engine/Camera.mjs';
+import { p5engine, p } from './RPG/Core/p5engine.mjs'; //somehow this spawns a p5 engine
+import { mainMenu } from './RPG/Core/Game/Modes/MainMenu.mjs';
+import { playMode } from './RPG/Core/Game/Modes/PlayMode.mjs';
+import { editMode } from './RPG/Core/Game/Modes/EditMode.mjs';
+import { modeSwitcher } from './RPG/Core/ModeSwitcher.mjs'; //this starts the scene manager
 
-var player = new Player(0,0,128);
-cam.follow(player);
+modeSwitcher.addMode("Main Menu", mainMenu);
+modeSwitcher.addMode("Play Mode", playMode);
+modeSwitcher.addMode("Edit Mode", editMode);
 
-cosmicEntityManager.addEntity(cam);
-cosmicEntityManager.addEntity(player);
+modeSwitcher.loadMode("Main Menu"); //this is now how i will make it load the main menu on start
 
-//im glad this is somehow possible. 
-//i can swap out tech ez now.
+//how can we work the scene manager?
+//we need to set up game cosmic entities
+//a list of entities that belong to the game 
+//that should only be shown when the game is playing or editing
 
+/*
+    vv  in the game n0config module  vv
+    var globalEntities = []; // push cam and player
+
+    vv  on scene load, run this  vv
+    for entitiy in globalEntities
+         cosmicEntityManager.addEntity(entitiy);
+    //this is where we can start to add more entities related to the game mode.
+*/ 
 
 /*
 
@@ -20,7 +32,6 @@ import { Tile } from './RPG/Tile.mjs';
 import { Transform }  from './RPG/Engine/Transform.mjs';
 import { Player } from './RPG/Player.mjs';
 import { Camera } from './RPG/Engine/Camera.mjs';
-import { SceneManager } from './RPG/SceneManager.mjs';
 
 let sceneManager;
 let scene, mapTexture;
