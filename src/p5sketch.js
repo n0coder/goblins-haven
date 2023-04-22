@@ -1,8 +1,8 @@
-import { p5engine, p } from './RPG/Core/p5engine.mjs'; //somehow this spawns a p5 engine
-import { mainMenu } from './RPG/Core/Game/Modes/MainMenu.mjs';
-import { playMode } from './RPG/Core/Game/Modes/PlayMode.mjs';
-import { editMode } from './RPG/Core/Game/Modes/EditMode.mjs';
-import { modeSwitcher } from './RPG/Core/ModeSwitcher.mjs'; //this starts the scene manager
+import { p5engine, p } from './Core/p5engine.mjs'; //somehow this spawns a p5 engine
+import { mainMenu } from './Core/Game/Modes/MainMenu.mjs';
+import { playMode } from './Core/Game/Modes/PlayMode.mjs';
+import { editMode } from './Core/Game/Modes/EditMode/EditMode.mjs';
+import { modeSwitcher } from './Core/ModeSwitcher.mjs'; //this starts the scene manager
 
 modeSwitcher.addMode("Main Menu", mainMenu);
 modeSwitcher.addMode("Play Mode", playMode);
@@ -28,10 +28,10 @@ modeSwitcher.loadMode("Main Menu"); //this is now how i will make it load the ma
 /*
 
 
-import { Tile } from './RPG/Tile.mjs';
-import { Transform }  from './RPG/Engine/Transform.mjs';
-import { Player } from './RPG/Player.mjs';
-import { Camera } from './RPG/Engine/Camera.mjs';
+import { Tile } from './Tile.mjs';
+import { Transform }  from './Engine/Transform.mjs';
+import { Player } from './Player.mjs';
+import { Camera } from './Engine/Camera.mjs';
 
 let sceneManager;
 let scene, mapTexture;

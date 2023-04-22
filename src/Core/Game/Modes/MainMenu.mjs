@@ -1,5 +1,5 @@
 //this is an issue ../../../../...
-import {experiments} from "../../../../DumbExperiment.mjs";
+import {experiments} from "../Experiments/DumbExperiment.mjs";
 import { modeSwitcher } from "../../ModeSwitcher.mjs";
 import { p } from "../../p5engine.mjs";
 import { CosmicEntity as CosmicGalaxy } from "../../CosmicEntity/CosmicEntity.mjs";

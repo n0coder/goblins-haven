@@ -1,13 +1,14 @@
-import {ContextMenu} from "../../../Engine/LevelEditor/ContextMenu.mjs";
-
-import { CosmicEntity as CosmicGalaxy } from "../../CosmicEntity/CosmicEntity.mjs";
-import { possibleTiles } from "../../n0config.mjs";
+import {ContextMenu} from "./ContextMenu.mjs";
+import { CosmicEntity as CosmicGalaxy } from "../../../CosmicEntity/CosmicEntity.mjs";
+import { possibleTiles } from "../../../n0config.mjs";
+import { mapLab } from "../../Map/MapLab.mjs";
+import { grid } from "../../Map/EditorGrid.mjs";
 
 export class EditMode extends CosmicGalaxy {
     constructor() {
         super();
-        //this.mapLab = new MapLab(p);
-        //this.mapLab.onMapChanged = (oldMap, newMap) => this.onMapChanged(oldMap, newMap);
+        mapLab.onMapChanged = (oldMap, newMap) => this.onMapChanged(oldMap, newMap);
+        grid.init(64); //set grid to pixelsize 64x64...
         //this.editorGrid = new EditorGrid(p, camera, 64, this);
 
         this.currentTile = possibleTiles[1];
@@ -15,7 +16,7 @@ export class EditMode extends CosmicGalaxy {
         // other editing-related properties
     }
     onNewSelected() {
-        this.mapLab.newMap();
+        mapLab.newMap();
         console.log("new was selected");
         // reset editor grid
         // set currentTile to default mode

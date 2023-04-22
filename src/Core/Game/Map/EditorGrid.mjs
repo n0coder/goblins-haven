@@ -1,8 +1,6 @@
 // EditorGrid module
-export class EditorGrid {
-    constructor(p, camera, tileSize = 64, editMode) {
-        this.p = p;
-        this.camera = camera;
+export class Grid {
+    constructor(tileSize = 64, editMode) {
         this.tileSize = tileSize;
         this.colorMode = false;
         this.grid = [];
@@ -129,3 +127,4 @@ export class EditorGrid {
         this.p.noStroke();
     }
 }
+export const grid = new Grid();

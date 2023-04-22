@@ -1,4 +1,4 @@
-import {Grid} from '../../../Grid.mjs';
+import {Grid} from '../Map/EditorGrid.mjs';
 import { CosmicEntity as CosmicGalaxy } from "../../CosmicEntity/CosmicEntity.mjs";
 
 //this is probably a bad idea to rename the inheritance
@@ -10,7 +10,7 @@ export class PlayMode extends CosmicGalaxy {
 
         //this doesn't make sense here anymore
         this.scene.setup(()=>{
-            let grid = new Grid(this.possibleTiles, 64);
+            let grid = new Grid();
             grid.generateGrid(this.mapTexture);
             grid.findSize();
             return grid;

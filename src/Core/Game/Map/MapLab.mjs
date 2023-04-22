@@ -1,10 +1,12 @@
 /* how i generated this class using chatgpt:
  https://github.com/n0coder/goblins-haven/blob/main/chatgpt/features/maplab.md
  */
+
+ //this is overengineered. we can improve this now...
+import { p } from "../../p5engine.mjs";
 import {MapData} from "./MapData.mjs";
 export class MapLab {
-    constructor(p) {
-        this.p = p;
+    constructor() {
         this.maps = [];
         this.currentMap; // what style do i go for... always open, modification creates new and sets dirty?
         this.onMapChanged;
@@ -169,7 +171,7 @@ export class MapLab {
     async createImage(mapBlob) {
         const url = URL.createObjectURL(mapBlob);
         const mapImg = await new Promise(resolve => {
-            this.p.createImg(url, img => {
+            p.createImg(url, img => {
                 resolve(img);
             });
         });
@@ -206,3 +208,4 @@ export class MapLab {
       }
       
 }
+export const mapLab = new MapLab();
