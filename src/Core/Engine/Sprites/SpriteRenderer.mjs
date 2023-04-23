@@ -1,8 +1,7 @@
-import { p } from "../Core/p5engine.mjs";
+import { p } from "../../p5engine.mjs";
 
 export class SpriteRenderer {
     constructor(sprite, transform) {
-      
       this.sprite = sprite;
       this.transform = transform;
     }

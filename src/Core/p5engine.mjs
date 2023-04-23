@@ -6,17 +6,18 @@ class P5engine {
         this.p = new window.p5(this.p5);
     }
 
-    p5(p) {
-        p.preload = (...args) => {
+    p5(p) { 
+          p.preload = function (...args) {
             cosmicEntityManager.invoke("preload", ...args);
           };
           
-          p.setup = (...args) => {
+          p.setup = function(...args)  {
             p.createCanvas(gameW,gameH).parent("sketch-holder");
             cosmicEntityManager.invoke("setup", ...args);
+           
           };
           
-          p.draw = (...args) => {
+          p.draw = function(...args)  {
             p.background(34.5, 34.5, 34.5);
             p.noStroke();
             var dt = calculateDeltaTime();
@@ -25,47 +26,47 @@ class P5engine {
             cosmicEntityManager.invoke("draw", dt, ...args);
           };
           
-          p.mouseClicked = (...args) => {
+          p.mouseClicked =function (...args)  {
             cosmicEntityManager.invoke("mouseClicked", ...args);
           };
           
-          p.mouseDragged = (...args) => {
+          p.mouseDragged =function (...args)  {
             cosmicEntityManager.invoke("mouseDragged", ...args);
           };
           
-          p.mouseMoved = (...args) => {
+          p.mouseMoved =function (...args)  {
             cosmicEntityManager.invoke("mouseMoved", ...args);
           };
           
-          p.mousePressed = (...args) => {
+          p.mousePressed = function(...args)  {
             cosmicEntityManager.invoke("mousePressed", ...args);
           };
           
-          p.mouseReleased = (...args) => {
+          p.mouseReleased = function(...args)  {
             cosmicEntityManager.invoke("mouseReleased", ...args);
           };
           
-          p.mouseWheel = (...args) => {
+          p.mouseWheel = function(...args)  {
             cosmicEntityManager.invoke("mouseWheel", ...args);
           };
           
-          p.doubleClicked = (...args) => {
+          p.doubleClicked = function(...args)  {
             cosmicEntityManager.invoke("doubleClicked", ...args);
           };
           
-          p.windowResized = (...args) => {
+          p.windowResized = function(...args)  {
             cosmicEntityManager.invoke("windowResized", ...args);
           };
           
-          p.keyPressed = (...args) => {
+          p.keyPressed =function (...args)  {
             cosmicEntityManager.invoke("keyPressed", ...args);
           };
           
-          p.keyReleased = (...args) => {
+          p.keyReleased = function(...args)  {
             cosmicEntityManager.invoke("keyReleased", ...args);
           };
           
-          p.keyTyped = (...args) => {
+          p.keyTyped = function(...args)  {
             cosmicEntityManager.invoke("keyTyped", ...args);
           };
           

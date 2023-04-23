@@ -1,4 +1,5 @@
-import { p5engine, p } from './Core/p5engine.mjs'; //somehow this spawns a p5 engine
+import { p5engine, p } from './Core/p5engine.mjs'; 
+import { globalEntities } from './Core/globalEntities.mjs';
 import { mainMenu } from './Core/Game/Modes/MainMenu.mjs';
 import { playMode } from './Core/Game/Modes/PlayMode.mjs';
 import { editMode } from './Core/Game/Modes/EditMode/EditMode.mjs';

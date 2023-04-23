@@ -2,7 +2,6 @@
  https://github.com/n0coder/goblins-haven/blob/main/chatgpt/features/maplab.md
  */
 
- //this is overengineered. we can improve this now...
 import { p } from "../../p5engine.mjs";
 import {MapData} from "./MapData.mjs";
 export class MapLab {

@@ -1,7 +1,7 @@
 
-import { CosmicEntity } from "../Core/CosmicEntity/CosmicEntity.mjs";
-import { gameH, gameW } from "../Core/n0config.mjs";
-import { p, p5engine } from "../Core/p5engine.mjs";
+import { CosmicEntity } from "../CosmicEntity/CosmicEntity.mjs";
+import { gameH, gameW } from "../n0config.mjs";
+import { p } from "../p5engine.mjs";
 import {Vector2} from "./Math/Vector2";
 import { Transform } from "./Transform.mjs";
 //import p5 instance through module

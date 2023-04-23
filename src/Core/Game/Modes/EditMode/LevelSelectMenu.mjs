@@ -1,28 +1,28 @@
+import { p } from "../../../p5engine.mjs";
+
 export class LevelSelectMenu {
-    constructor(p5, newa, open, save) {
-        this.p5 = p5;
+    constructor(newa, open, save) {
         this.save = save;
         this.new = newa;
         this.open = open;
         this.maps = ["assets/maps/f11-map-test.png", "assets/maps/mapspacetest.png"];
         this.selectedMap = 0;
-
     }
 
     openMenu(editModeCallback) {
-        this.menu = this.p5.createDiv("").id("editorMenu").parent("menu");
+        this.menu = p.createDiv("").id("editorMenu").parent("menu");
 
         // first section
-        let firstSection = this.p5.createDiv("").parent(this.menu).addClass("menuSection");
-        let newButton = this.p5.createButton("New").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.new?.call());
-        let openButton = this.p5.createButton("Open").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.openMenu?.call());
-        let saveButton = this.p5.createButton("Save").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.save?.call());
+        let firstSection = p.createDiv("").parent(this.menu).addClass("menuSection");
+        let newButton = p.createButton("New").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.new?.call());
+        let openButton = p.createButton("Open").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.openMenu?.call());
+        let saveButton = p.createButton("Save").parent(firstSection).addClass("MainMenuButton").mousePressed(async () => await this.save?.call());
         
         // second section
         /*
-        let secondSection = this.p5.createDiv("").parent(this.menu).addClass("menuSection");
+        let secondSection = p.createDiv("").parent(this.menu).addClass("menuSection");
         this.maps.forEach((map, index) => {
-            let mapButton = this.p5.createButton(map).parent(secondSection).addClass("MainMenuButton mapButton").mousePressed(() => {
+            let mapButton = p.createButton(map).parent(secondSection).addClass("MainMenuButton mapButton").mousePressed(() => {
                 this.selectedMap = index;
                 editModeCallback ?. call(this.maps[index]);
                 console.log("Map button pressed");
@@ -48,8 +48,8 @@ export class LevelSelectMenu {
         };
         let o = secondaryMenus[type];
         if (o) {
-            this.p5.select('#secondaryEditorMenu')?.remove(); 
-            let menu = this.p5.createDiv("").id("secondaryEditorMenu").parent("menu");
+            p.select('#secondaryEditorMenu')?.remove(); 
+            let menu = p.createDiv("").id("secondaryEditorMenu").parent("menu");
             o(menu);
         }
     }
@@ -62,3 +62,4 @@ export class LevelSelectMenu {
     
 
 }
+export const levelSelectMenu = new LevelSelectMenu();

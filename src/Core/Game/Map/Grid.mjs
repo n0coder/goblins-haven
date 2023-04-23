@@ -1,12 +1,13 @@
 // EditorGrid module
 export class Grid {
-    constructor(tileSize = 64, editMode) {
-        this.tileSize = tileSize;
+    constructor(editMode) {
         this.colorMode = false;
         this.grid = [];
         this.editMode = editMode;
     }
-
+    init(tileSize) {
+        this.tileSize = tileSize;
+    }
     toggleColorMode() {
         this.colorMode = !this.colorMode;
     }

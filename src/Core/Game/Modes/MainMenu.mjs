@@ -1,5 +1,5 @@
 //this is an issue ../../../../...
-import {experiments} from "../Experiments/DumbExperiment.mjs";
+import {modStringFunny} from "../Experiments/DumbExperiment.mjs";
 import { modeSwitcher } from "../../ModeSwitcher.mjs";
 import { p } from "../../p5engine.mjs";
 import { CosmicEntity as CosmicGalaxy } from "../../CosmicEntity/CosmicEntity.mjs";
@@ -16,7 +16,7 @@ export class MainMenu extends CosmicGalaxy {
             },
             {
                 name: "New",
-                action: () => console.log(experiments.modStringFunny(`level ${
+                action: () => console.log(modStringFunny(`level ${
                     Date.now()
                 }`))
             },

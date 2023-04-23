@@ -1,8 +1,9 @@
-import {Transform} from "./Engine/Transform.mjs";
-import {SpriteRenderer} from "./Engine/SpriteRenderer.mjs";
-import { Vector2 } from "./Engine/Math/Vector2.mjs";
-import { p } from "./Core/p5engine.mjs";
-import { CosmicEntity } from "./Core/CosmicEntity/CosmicEntity.mjs";
+import { Transform } from "../../Engine/Transform.mjs";
+import {SpriteRenderer} from "../../Engine/Sprites/SpriteRenderer.mjs";
+import { Vector2 } from "../../Engine/Math/Vector2.mjs";
+import { p } from "../../p5engine.mjs";
+import { CosmicEntity } from "../../CosmicEntity/CosmicEntity.mjs";
+import { loadImage } from "../../Engine/Sprites/ImageLoader.mjs";
 
 export class Player extends CosmicEntity {
     constructor(x, y, size) {
@@ -18,6 +19,7 @@ export class Player extends CosmicEntity {
             UP: new Vector2(0, -1), 
             DOWN: new Vector2(0, 1) 
         };
+        
         const {W, A, S, D} = {W: 87, A: 65, S: 83, D: 68};
         this.keys = {
             LEFT: [p.LEFT_ARROW, A],
@@ -26,18 +28,27 @@ export class Player extends CosmicEntity {
             DOWN: [p.DOWN_ARROW, S]
         };
     }
-    preload() {
-        this.sprite = p.loadImage('assets/chara.png');
-        this.spriteRenderer = new SpriteRenderer(this.sprite, this.transform);
+    start() {
+        
+        p.loadImage('assets/chara.png', (img)=> {
+            this.spriteRenderer = new SpriteRenderer(img, this.transform);
+        });
     }
+    //keyPressed, keyReleased, keyTyped?!
+
+    
 
     draw(deltaTime) {
-        Object.keys(this.keys).forEach(dir => {
-            if (this.keys[dir].some(key => p.keyIsDown(key))) {
-                let o = this.speed*deltaTime;
-              this.transform.translate(this.dirs[dir].x * o, this.dirs[dir].y*o);
-            }
-          });
-        this.spriteRenderer.draw();
+        // Check if any of the keys are pressed and move the player accordingly
+Object.keys(this.keys).forEach(dir => {
+    if (this.keys[dir].some(key => p.keyIsDown(key))) {
+        let direction = this.dirs[dir];
+        let x = direction.x * this.speed * deltaTime;
+        let y = direction.y * this.speed * deltaTime;
+        this.transform.translate(x, y);
+    }
+});
+           
+        this.spriteRenderer?.draw();
     }
 }

@@ -2,17 +2,22 @@ import {ContextMenu} from "./ContextMenu.mjs";
 import { CosmicEntity as CosmicGalaxy } from "../../../CosmicEntity/CosmicEntity.mjs";
 import { possibleTiles } from "../../../n0config.mjs";
 import { mapLab } from "../../Map/MapLab.mjs";
-import { grid } from "../../Map/EditorGrid.mjs";
+import { grid } from "../../Map/Grid.mjs";
+import { levelSelectMenu } from "./LevelSelectMenu.mjs";
+import { cosmicEntityManager } from "../../../CosmicEntity/CosmicEntityManager.mjs";
+import { startGlobalEntities } from "../../../globalEntities.mjs";
 
 export class EditMode extends CosmicGalaxy {
     constructor() {
         super();
         mapLab.onMapChanged = (oldMap, newMap) => this.onMapChanged(oldMap, newMap);
-        grid.init(64); //set grid to pixelsize 64x64...
-        //this.editorGrid = new EditorGrid(p, camera, 64, this);
-
+        grid.init(64);
         this.currentTile = possibleTiles[1];
-        //this.levelSelector = new LevelSelectMenu(p, () => this.onNewSelected(), async () => await this.onOpenSelected(), async () => await this.onSaveSelected());
+
+        levelSelectMenu.new = () => this.onNewSelected();
+        levelSelectMenu.open = async () => await this.onOpenSelected();
+        levelSelectMenu.save = async () => await this.onSaveSelected();
+        
         // other editing-related properties
     }
     onNewSelected() {
@@ -40,12 +45,12 @@ export class EditMode extends CosmicGalaxy {
     }
 
     async onSaveSelected(mapName = "map") {
-        // console.log([this.editorGrid, this.editorGrid.saveGrid])
+        // console.log([grid, grid.saveGrid])
         // pack tiles from the editor grid into a texture
         this.mapLab.saveMap(); 
         //some work will have to be done to have it save the grid...
         /*
-        await this.editorGrid.saveGrid(mapName, async (zip) => {
+        await grid.saveGrid(mapName, async (zip) => {
           console.log(zip);
           zip.file("extra.txt", "testing extra pipe\n");
         }); // ask chatgpt how to convert the p5.img file to a png and insert it to the zip without saving it
@@ -56,8 +61,8 @@ export class EditMode extends CosmicGalaxy {
     leftClick() {
 
         if (!(this.open)) {
-            const [gridX, gridY] = this.editorGrid.getGridCoords(this.p.mouseX, this.p.mouseY);
-            this.editorGrid.placeTile(this.currentTile, gridX, gridY);
+            const [gridX, gridY] = grid.getGridCoords(this.p.mouseX, this.p.mouseY);
+            grid.placeTile(this.currentTile, gridX, gridY);
 
             // console.log(`left click ${gridX}, ${gridY}`);
         }
@@ -66,25 +71,36 @@ export class EditMode extends CosmicGalaxy {
     }
     rightClick() {
 
-        const [gridX, gridY] = this.editorGrid.getGridCoords(this.p.mouseX, this.p.mouseY, this.camera);
-        // this.editorGrid.removeTile(gridX, gridY);
-        // this.editorGrid.saveGrid();
+        const [gridX, gridY] = grid.getGridCoords(this.p.mouseX, this.p.mouseY, this.camera);
+        // grid.removeTile(gridX, gridY);
+        // grid.saveGrid();
         // console.log(`right click ${gridX}, ${gridY}`);
         this.contextMenu.rightClick();
 
         this.open = this.contextMenu ?. menuOpen;
         super.rightClick();
     }
+
+    preload() {
+        
+    }
+
     // TODO: i need to handle the loading of specific levels in the editor
     start() { // somehow get possible tiles loaded here
-
+        /*
         this.scene.setup(() => {
             // grid.generateGrid(selectedMap); //hold this for reference
             // grid.findSize();
-            return this.editorGrid;
+            return grid;
         });
+        */
+        //import the global objects
+        startGlobalEntities();
+        
 
-        this.levelSelector.openMenu((selectedMap) => {});
+        levelSelectMenu.openMenu((selectedMap) => {
+            console.log([selectedMap, "on open menu?"]);
+        });
         // painting context menu:
         this.contextMenu = new ContextMenu(this.p, this.possibleTiles);
         this.contextMenu.onTilePicked = (oa) => {
@@ -92,15 +108,22 @@ export class EditMode extends CosmicGalaxy {
             console.log(["picked tile", oa]);
         };
         this.contextMenu.start();
-        super.start();
     }
     end() {
-        super.end();
+        //close menus...
+        //clean up edit mode entities
     }
-    update(deltaTime) {
-        super.update(deltaTime);
+    draw(deltaTime) { //this is draw now 
         // update game logic for edit mode
         // this.handleEditing();
+
+        /* //why does this exist?
+        if (currentMode === PlayMode) {
+          currentMode.update();
+        } else if (currentMode === EditMode) {
+          currentMode.update();
+        }
+        */
         // other editing-related tasks
     }
 
@@ -108,17 +131,6 @@ export class EditMode extends CosmicGalaxy {
         if (this.isDrawing) { // draw on lookup texture
         } else if (this.isEditing) { // open tile editor
         }
-    }
-
-    draw() {
-        super.draw();
-        /*
-        if (currentMode === PlayMode) {
-          currentMode.update();
-        } else if (currentMode === EditMode) {
-          currentMode.update();
-        }
-    */
     }
     // other methods for handling editing
 }

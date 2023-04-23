@@ -1,7 +1,4 @@
-export class experiments {
-    
-
-    static modStringFunny(baseWord) {
+export function modStringFunny (baseWord) {
         const mods = [
             {name:"round", func: (word) => {
                 const replacements = {
@@ -190,7 +187,7 @@ export class experiments {
         //console.log(modchain);
           return input;
       }
-      static generateRandomString(n) {
+      export function generateRandomString(n) {
         const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         let randomString = '';
         for (let i = 0; i < n; i++) {
@@ -199,7 +196,7 @@ export class experiments {
         }
         return randomString;
       }
-      static cleanEndString(str, max) {
+      export function cleanEndString(str, max) {
         const notAllowedChars = "{}[]-~=_+()<>!@#$%^&*/.,:|?`;\"'";
         let count = 0;
         for (let i = str.length - 1; i >= 0 && str.length > max; i--) {
@@ -210,4 +207,3 @@ export class experiments {
         }
         return str;
       }
-}
